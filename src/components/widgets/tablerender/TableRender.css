@@ -1,0 +1,37 @@
+.editable-cell {
+  position: relative;
+}
+
+.editable-cell-value-wrap {
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.editable-row:hover .editable-cell-value-wrap {
+  padding: 4px 11px;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+}
+
+[data-theme="dark"] .editable-row:hover .editable-cell-value-wrap {
+  border: 1px solid #434343;
+}
+.table-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 20%;
+}
+p {
+  font-weight: bold;
+}
+.footer {
+  width: 100%;
+  background-color: gold;
+  padding-left: 0;
+  border: 1px solid;
+}
+.left {
+  margin-right: 60%;
+}
