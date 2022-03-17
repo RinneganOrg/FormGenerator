@@ -136,7 +136,7 @@ const EditableCell = ({
 
 function TableRender({ id, name }) {
   const tableData = useSelector((state) => {
-    const found = state.elements.find((element) => element.id === id);
+    const found = state.elementsEfficent.get(id);
     return found;
   });
   const elements = useSelector((state) => {

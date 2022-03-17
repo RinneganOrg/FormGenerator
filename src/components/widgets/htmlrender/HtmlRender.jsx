@@ -37,9 +37,8 @@ function convertToHtml(blocks, setConvertedHtml) {
 
 function HtmlRender({ id }) {
   const htmlSchema = useSelector(
-    (state) => state.elements.find((element) => element.id === id).htmlSchema
+    (state) => state.elementsEfficent.get(id).htmlSchema
   );
-  console.log(htmlSchema);
   const [convertedHtml, setConvertedHtml] = useState("");
 
   useEffect(() => {

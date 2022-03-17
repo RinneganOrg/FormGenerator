@@ -1,16 +1,15 @@
 import React, { useEffect } from "react";
 import { Widgets } from "./widgets";
-import { connect } from "react-redux";
-function FieldGenerator({ tabSchema, pageName, tabName, siteSchema }) {
+import { useSelector } from "react-redux";
+function FieldGenerator({ tabSchema, pageName, tabName }) {
+  const state = useSelector((state) => state);
   const checkVisibility = (visibility) => {
     let show = true;
 
     visibility.forEach((condition) => {
-      const element = siteSchema.elements.find(
-        (element) => parseInt(element.id) === parseInt(condition.id)
-      );
+      const element = state.elementsEfficent.get(parseInt(condition.id));
       condition.dependencies.forEach((dependency) => {
-        if (element.data[dependency.key] != dependency.value) show = false;
+        if (element.data[dependency.key] !== dependency.value) show = false;
       });
     });
     return show;
@@ -31,16 +30,11 @@ function FieldGenerator({ tabSchema, pageName, tabName, siteSchema }) {
           tabName: tabName,
 
           id: block.id,
-          name: block?.name
+          name: block?.name,
         };
         return show && Widgets[block.type](props);
       })}
     </>
   );
 }
-function mapStateToProps(state) {
-  return {
-    siteSchema: state
-  };
-}
-export default connect(mapStateToProps, null)(FieldGenerator);
+export default FieldGenerator;

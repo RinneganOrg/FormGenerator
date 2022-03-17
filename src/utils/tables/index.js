@@ -1,28 +1,22 @@
 export const getValueOfSpecifedTable = (specifedTable, siteSchema) => {
-  const specifedTableIndex = siteSchema?.elements?.findIndex(
-    (block) => block?.type === "table" && block?.id === specifedTable?.id
+  const specifedTableFromState = siteSchema?.elementsEfficent?.get(
+    specifedTable.id
   );
 
-  const rowIndexOfSpecifedTable = siteSchema?.elements[
-    specifedTableIndex
-  ]?.data.findIndex(
+  const rowIndexOfSpecifedTable = specifedTableFromState?.data.findIndex(
     (row) => parseInt(row?.key) === parseInt(specifedTable?.key)
   );
 
-  return siteSchema?.elements[specifedTableIndex]?.data[
-    rowIndexOfSpecifedTable
-  ][specifedTable.dataIndex];
+  return specifedTableFromState.data[rowIndexOfSpecifedTable][
+    specifedTable.dataIndex
+  ];
 };
 
 export const getValuesOfAColumn = (details, siteSchema) => {
   const id = details?.id;
   const dataIndex = details?.dataIndex;
-  const specifedTable = Object.assign(
-    siteSchema?.elements?.find(
-      (block) => block?.type === "table" && block?.id === id
-    )
-  );
-  const values = new Array();
+  const specifedTable = Object.assign(siteSchema.elementsEfficent.get(id));
+  const values = [];
   specifedTable.data.forEach((row) => {
     values.push(Object.assign(row[dataIndex]));
   });
@@ -35,11 +29,7 @@ export const insertTableIntoRedux = (
   addNewElement,
   element
 ) => {
-  if (
-    siteSchema?.elements?.findIndex(
-      (block) => block?.type === "table" && block?.id === element.id
-    ) === -1
-  ) {
+  if (siteSchema?.elementsEfficent.has(element.id) === false) {
     const payload = {
       type: "table",
       id: element.id,

@@ -9,18 +9,13 @@ import { UPDATE_FORM } from "../../../redux/constants";
 
 function FormRender({ id }) {
   const dispatch = useDispatch();
-  const uiSchema = useSelector(
-    (state) => state.elements.find((element) => element.id === id).uiSchema
-  );
-  const data = useSelector(
-    (state) => state.elements.find((element) => element.id === id).data
-  );
-  const schema = useSelector(
-    (state) => state.elements.find((element) => element.id === id).schema
-  );
-  const form = useSelector((state) =>
-    state.elements.find((element) => element.id === id)
-  );
+  const form = useSelector((state) => state.elementsEfficent.get(id));
+  const uiSchema = useSelector((state) =>
+    state.elementsEfficent.get(id)
+  ).uiSchema;
+  const data = useSelector((state) => state.elementsEfficent.get(id)).data;
+  const schema = useSelector((state) => state.elementsEfficent.get(id)).schema;
+
   const updateForm = (data) => {
     const newObjectForm = Object.assign(form);
     newObjectForm.data = data;
