@@ -11,12 +11,9 @@ import PageStart from "./components/pagesgenerator/PageStart";
 import * as TablesSchemas from "./schemas/schemasTables";
 import * as InputsSchemas from "./schemas/schemasInputs";
 import {
-  getValueOfSpecifedTable,
   insertTableIntoRedux,
   insertInputIntoRedux,
-  updateDyanmicTables,
-  getColumnsFromAnotherTable,
-  insertHtmlIntoRedux,
+  insertHtmlIntoRedux
 } from "./utils/tables";
 
 const { Footer } = Layout;
@@ -51,19 +48,11 @@ function App() {
               element
             );
           } else if (element.type === "input") {
-            if (
-              siteSchema?.elements?.findIndex(
-                (block) => block?.type === "input" && block?.id === element.id
-              ) === -1
-            ) {
+            if (siteSchema?.elementsEfficent?.has(element.id) === false) {
               insertInputIntoRedux(InputsSchemas, element, addNewElement);
             }
           } else if (element.type === "html") {
-            if (
-              siteSchema?.elements?.findIndex(
-                (block) => block?.type === "html" && block?.id === element.id
-              ) === -1
-            ) {
+            if (siteSchema?.elementsEfficent?.has(element.id) === false) {
               insertHtmlIntoRedux(element, addNewElement);
             }
           }
@@ -71,11 +60,6 @@ function App() {
       });
     });
   }, [addNewElement, selectedCountry, siteSchema]);
-
-  useEffect(() => {
-    updateDyanmicTables(siteSchema, TablesSchemas, updateSchema);
-    getColumnsFromAnotherTable(siteSchema, TablesSchemas, updateSchema);
-  }, [siteSchema, siteSchema.elements, updateSchema]);
 
   return (
     <>

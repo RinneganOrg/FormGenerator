@@ -13,27 +13,27 @@ export const schemaRomania = [
                 type: "header",
                 data: {
                   text: "This is a heading",
-                  level: 2,
-                },
+                  level: 2
+                }
               },
               {
                 type: "paragraph",
                 data: {
-                  text: "This is a paragraph",
-                },
-              },
-            ],
+                  text: "This is a paragraph"
+                }
+              }
+            ]
           },
           {
             type: "table",
             nameTable: "tableSurfaceCounties",
             id: 4,
-            name: "Counties",
+            name: "Counties"
           },
           {
             type: "input",
             nameInput: "RadioInput",
-            id: 8,
+            id: 8
           },
           {
             type: "table",
@@ -44,10 +44,10 @@ export const schemaRomania = [
               {
                 id: 8,
                 dependencies: [
-                  { key: "exampleRadioEnum", value: "Default Table" },
-                ],
-              },
-            ],
+                  { key: "exampleRadioEnum", value: "Default Table" }
+                ]
+              }
+            ]
           },
           {
             type: "table",
@@ -58,10 +58,10 @@ export const schemaRomania = [
               {
                 id: 8,
                 dependencies: [
-                  { key: "exampleRadioEnum", value: "Custom Table" },
-                ],
-              },
-            ],
+                  { key: "exampleRadioEnum", value: "Custom Table" }
+                ]
+              }
+            ]
           },
           {
             type: "table",
@@ -72,29 +72,27 @@ export const schemaRomania = [
               {
                 id: 8,
                 dependencies: [
-                  { key: "exampleRadioEnum", value: "Custom Table" },
-                ],
-              },
+                  { key: "exampleRadioEnum", value: "Custom Table" }
+                ]
+              }
             ],
-            getColumns: { id: 20, dataIndex: "property" },
-          },
-        ],
-      },
-    ],
+            getColumns: { id: 20, dataIndex: "property" }
+          }
+        ]
+      }
+    ]
   },
   {
     pageName: "Forests",
     tabs: [
       {
         tabName: "Rodna",
-        elements: [
-          { type: "table", nameTable: "tableSurfaceCountries", id: 1 },
-        ],
+        elements: [{ type: "table", nameTable: "tableSurfaceCountries", id: 1 }]
       },
       {
         tabName: "Brasov",
-        elements: [{ type: "table", nameTable: "tableSurfaceCounties", id: 2 }],
-      },
-    ],
-  },
+        elements: [{ type: "table", nameTable: "tableSurfaceCounties", id: 2 }]
+      }
+    ]
+  }
 ];

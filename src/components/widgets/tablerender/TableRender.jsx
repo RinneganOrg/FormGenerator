@@ -1,13 +1,62 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table, Input, Button, Form } from "antd";
-import { UPDATE_TABLE } from "../../../redux/constants";
+import { UPDATE_TABLE, UPDATE_SCHEMA_TABLE } from "../../../redux/constants";
 import "./TableRender.css";
 import * as Validations from "../../../CellValidationsFunction/index";
 import * as Popovers from "../../../utils/popovers";
 import * as Footers from "../../../utils/footers";
 import { validations, footersFunction, popovers } from "./utils";
 import { Popover } from "antd";
+import { getValuesOfAColumn } from "../../../utils/tables";
+import * as TablesSchemas from "../../../schemas/schemasTables";
+
+const updateDynamicTable = (
+  tableData,
+  updateSchema,
+  elements,
+  insertRow,
+  setSchemaTable
+) => {
+  if (!tableData.getColumns) return;
+  const idOfImportTable = tableData?.getColumns?.id;
+  console.log({ tableData });
+  const dataIndexOfImportTable = tableData?.getColumns?.dataIndex;
+  if (elements.elementsEfficent.size === 0) return;
+  const values = [
+    ...getValuesOfAColumn(
+      {
+        id: idOfImportTable,
+        dataIndex: dataIndexOfImportTable
+      },
+      elements
+    )
+  ];
+  const newSchemaObject = [...TablesSchemas[tableData.nameTable].schema];
+  values.forEach((value) => {
+    let stringifyValue = JSON.stringify(value).slice(1);
+    stringifyValue = stringifyValue.slice(0, -1);
+    if (
+      stringifyValue.length > 0 &&
+      !newSchemaObject.find((column) => column.title === stringifyValue)
+    ) {
+      newSchemaObject.push({
+        title: stringifyValue,
+        editable: true,
+        dataIndex: stringifyValue
+      });
+    }
+  });
+  const newTable = JSON.parse(JSON.stringify(tableData));
+  newTable.schema = [...newSchemaObject];
+  console.log({ tableData });
+  if (JSON.stringify(tableData.schema) != JSON.stringify(newTable.schema)) {
+    const payload = { id: tableData.id, tableData: newTable };
+    console.log("idk");
+    setSchemaTable(newTable.schema);
+    updateSchema(payload);
+  }
+};
 
 const renderPopover = (
   value,
@@ -22,7 +71,7 @@ const renderPopover = (
     value: value,
     row: row,
     column: column,
-    tableData: Object.assign(tableData),
+    tableData: Object.assign(tableData)
   };
 
   let result = Popovers[popoverFunction](props);
@@ -68,7 +117,7 @@ const EditableCell = ({
   const toggleEdit = () => {
     setEditing(!editing);
     form.setFieldsValue({
-      [dataIndex]: record[dataIndex],
+      [dataIndex]: record[dataIndex]
     });
   };
 
@@ -87,17 +136,17 @@ const EditableCell = ({
     childNode = editing ? (
       <Form.Item
         style={{
-          margin: 0,
+          margin: 0
         }}
         name={dataIndex}
         rules={[
           {
             required: true,
-            message: `${title} is required.`,
+            message: `${title} is required.`
           },
           {
-            validator: validator,
-          },
+            validator: validator
+          }
         ]}
       >
         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
@@ -111,7 +160,7 @@ const EditableCell = ({
             defaultValuesRow !== undefined &&
             children[1] != defaultValuesRow[dataIndex]
               ? "gold"
-              : "white",
+              : "white"
         }}
         onClick={toggleEdit}
       >
@@ -136,16 +185,20 @@ const EditableCell = ({
 
 function TableRender({ id, name }) {
   const tableData = useSelector((state) => {
-    const found = state.elementsEfficent.get(id);
-    return found;
+    return state.elementsEfficent.get(parseInt(id));
   });
+
   const elements = useSelector((state) => {
-    return state.elements;
+    return state;
   });
+  const updateSchema = (payload) => {
+    dispatch({ type: UPDATE_TABLE, payload: payload });
+  };
   const [numRows, setNumRows] = useState(tableData.data.length);
   const [validationsOfTable, setValidationsOfTable] = useState({});
   const [popoversObject, setPopoversObject] = useState({});
   const [footers, setFooters] = useState([]);
+  const [schemaTable, setSchemaTable] = useState(tableData.schema);
   const dispatch = useDispatch();
 
   const handleAdd = () => {
@@ -168,7 +221,7 @@ function TableRender({ id, name }) {
 
     dispatch({
       type: UPDATE_TABLE,
-      payload: { id: id, tableData: newData },
+      payload: { id: id, tableData: newData }
     });
   };
   const insertRow = (row, defaultRow = null) => {
@@ -177,17 +230,25 @@ function TableRender({ id, name }) {
     if (defaultRow != null) newData.defaultValues.push(defaultRow);
     dispatch({
       type: UPDATE_TABLE,
-      payload: { id: id, tableData: newData },
+      payload: { id: id, tableData: newData }
     });
   };
-
+  console.log(schemaTable);
   useEffect(() => {
     footersFunction(tableData, Footers, setFooters);
+    updateDynamicTable(
+      tableData,
+      updateSchema,
+      elements,
+      insertRow,
+      setSchemaTable
+    );
   }, [elements, tableData]);
 
   useEffect(() => {
     validations(tableData, setValidationsOfTable);
     popovers(tableData, setPopoversObject);
+    setSchemaTable(tableData.schema);
   }, [tableData]);
   //SAVE MODIFICATIONS ON CELL
   const handleSave = (row) => {
@@ -197,11 +258,11 @@ function TableRender({ id, name }) {
   const components = {
     body: {
       row: EditableRow,
-      cell: EditableCell,
-    },
+      cell: EditableCell
+    }
   };
 
-  const columns = tableData?.schema.map((col) => {
+  const columns = schemaTable?.map((col) => {
     if (!col.editable) {
       return col;
     }
@@ -221,8 +282,8 @@ function TableRender({ id, name }) {
         popoversFunctions:
           popoversObject[col.dataIndex]?.length > 0
             ? popoversObject[col.dataIndex]
-            : [],
-      }),
+            : []
+      })
     };
   });
 
@@ -256,7 +317,7 @@ function TableRender({ id, name }) {
           onClick={handleAdd}
           type="primary"
           style={{
-            marginBottom: 16,
+            marginBottom: 16
           }}
         >
           Add a row

@@ -53,7 +53,7 @@ function PageRender({
   const checkErrors = () => {
     let errors = false;
     for (let key in Validations[country]) {
-      let result = Validations[country][key](siteSchema.elements);
+      let result = Validations[country][key](siteSchema.elementsEfficent);
 
       if (result.error === true) {
         openErrorNotification(result.errorMessage);

@@ -15,7 +15,9 @@ export const getValueOfSpecifedTable = (specifedTable, siteSchema) => {
 export const getValuesOfAColumn = (details, siteSchema) => {
   const id = details?.id;
   const dataIndex = details?.dataIndex;
-  const specifedTable = Object.assign(siteSchema.elementsEfficent.get(id));
+
+  if (!siteSchema.elementsEfficent) return;
+  const specifedTable = Object.assign(siteSchema?.elementsEfficent?.get(id));
   const values = [];
   specifedTable.data.forEach((row) => {
     values.push(Object.assign(row[dataIndex]));
@@ -41,7 +43,7 @@ export const insertTableIntoRedux = (
       footers: TablesSchemas[element.nameTable].footers
         ? [...TablesSchemas[element.nameTable].footers]
         : [],
-      generalValidation: TablesSchemas[element.nameTable].generalValidation,
+      generalValidation: TablesSchemas[element.nameTable].generalValidation
     };
     if (TablesSchemas[element.nameTable].visibility?.length > 0) {
       payload.visibility = [...TablesSchemas[element.nameTable]?.visibility];
@@ -58,7 +60,7 @@ export const insertInputIntoRedux = (InputsSchemas, element, addNewElement) => {
     default: Object.assign(InputsSchemas[element.nameInput].data),
     data: Object.assign(InputsSchemas[element.nameInput].data),
     uiSchema: Object.assign(InputsSchemas[element.nameInput].uiSchema),
-    schema: Object.assign(InputsSchemas[element.nameInput].schema),
+    schema: Object.assign(InputsSchemas[element.nameInput].schema)
   };
 
   addNewElement(payload);
@@ -66,94 +68,7 @@ export const insertInputIntoRedux = (InputsSchemas, element, addNewElement) => {
 
 export const insertHtmlIntoRedux = (element, addNewElement) => {
   const payload = {
-    ...element,
+    ...element
   };
   addNewElement(payload);
-};
-export const updateDyanmicTables = (
-  siteSchema,
-  TablesSchemas,
-  updateSchema
-) => {
-  const tables = siteSchema.elements.filter(
-    (element) => element?.type === "table"
-  );
-  const importValuesTables = tables.filter(
-    (table) => TablesSchemas[table.nameTable]?.dynamic === true
-  );
-
-  if (!importValuesTables) return;
-  importValuesTables.forEach((table) => {
-    const schemaOfTable = [...TablesSchemas[table.nameTable].schema];
-    const idOfTable = table.id;
-    schemaOfTable.forEach((column) => {
-      if (column.importValues) {
-        column.title = getValueOfSpecifedTable(column.importValues, siteSchema);
-      }
-    });
-
-    if (
-      JSON.stringify(
-        siteSchema.elements.find((table) => table.id === idOfTable).schema
-      ) !== JSON.stringify(schemaOfTable)
-    ) {
-      const payload = { id: idOfTable, schema: schemaOfTable };
-
-      updateSchema(payload);
-    }
-  });
-};
-
-export const getColumnsFromAnotherTable = (
-  siteSchema,
-  TablesSchemas,
-  updateSchema
-) => {
-  const tables = siteSchema.elements.filter(
-    (element) => element?.type === "table"
-  );
-  const getColumnsTables = tables.filter(
-    (table) => table.getColumns !== undefined
-  );
-
-  getColumnsTables.forEach((table) => {
-    const idOfImportTable = table?.getColumns?.id;
-    const dataIndexOfImportTable = table?.getColumns?.dataIndex;
-
-    const values = [
-      ...getValuesOfAColumn(
-        {
-          id: idOfImportTable,
-          dataIndex: dataIndexOfImportTable,
-        },
-        siteSchema
-      ),
-    ];
-    const newSchemaObject = [...TablesSchemas[table.nameTable].schema];
-    values.forEach((value) => {
-      let stringifyValue = JSON.stringify(value).slice(1);
-      stringifyValue = stringifyValue.slice(0, -1);
-      if (
-        stringifyValue.length > 0 &&
-        !newSchemaObject.find((column) => column.title === stringifyValue)
-      ) {
-        newSchemaObject.push({
-          title: stringifyValue,
-          editable: true,
-          dataIndex: stringifyValue,
-        });
-      }
-    });
-    const newTable = Object.assign(table);
-    newTable.schema = [...newSchemaObject];
-
-    if (
-      JSON.stringify(
-        siteSchema.elements.find((tablex) => tablex.id === table.id).schema
-      ) != JSON.stringify(newTable.schema)
-    ) {
-      const payload = { id: table.id, schema: newSchemaObject };
-      updateSchema(payload);
-    }
-  });
 };

@@ -17,7 +17,7 @@ function TabGeneratorModal({
   const handleOk = (table) => {
     let foundIndex = siteSchema.findIndex((x) => x.pageName === pageName);
 
-    siteSchema[foundIndex].tabs.push({ tabName: tabName, elements: [] });
+    siteSchema[foundIndex].tabs.push({ tabName: tabName });
     setModalTabGenerator(false);
     //   history.push(`/${pageName}$${tabName}`);
   };
