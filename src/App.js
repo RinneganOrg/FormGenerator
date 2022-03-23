@@ -27,11 +27,9 @@ function App() {
   const dispatch = useDispatch();
 
   //ACTIONS
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const addNewElement = (payload) => {
     dispatch({ type: ADD_ELEMENT_TO_SYSTEM, payload: payload });
-  };
-  const updateSchema = (payload) => {
-    dispatch({ type: UPDATE_SCHEMA_TABLE, payload: payload });
   };
 
   useEffect(() => {

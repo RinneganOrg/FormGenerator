@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Menu } from "antd";
 import { DiffOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "./navbar.css";
-
 import { useHistory } from "react-router-dom";
 import TabGeneratorModal from "../modals/TabGeneratorModal";
-import { connect } from "react-redux";
-function Navbar({ pageName, country, siteSchema }) {
+import { useSelector } from "react-redux";
+
+function Navbar({ pageName, country }) {
   const history = useHistory();
   const [modalTabGenerator, setModalTabGenerator] = useState(0);
+  const siteSchema = useSelector((state) => state);
   const [tabs, setTabs] = useState([]);
   useEffect(() => {
     setTabs(
@@ -17,11 +18,17 @@ function Navbar({ pageName, country, siteSchema }) {
   }, [country, siteSchema, pageName]);
   return (
     <div className="navbar">
+      {
+        //CMS FUNCTIONALITIES
+      }
       <TabGeneratorModal
         modalTabGenerator={modalTabGenerator}
         setModalTabGenerator={setModalTabGenerator}
         pageName={pageName}
       />
+      {
+        //Generator Functionalities
+      }
       <div className="inner">
         <Menu mode="horizontal">
           {tabs?.map((tab) => {
@@ -37,6 +44,9 @@ function Navbar({ pageName, country, siteSchema }) {
               </Menu.Item>
             );
           })}
+          {
+            //CMS FUNCTIONALITIES
+          }
           <Menu.Item
             key={"tab new"}
             icon={<PlusCircleOutlined />}
@@ -51,9 +61,5 @@ function Navbar({ pageName, country, siteSchema }) {
     </div>
   );
 }
-function mapStateToProps(state) {
-  return {
-    siteSchema: state,
-  };
-}
-export default connect(mapStateToProps, null)(Navbar);
+
+export default Navbar;

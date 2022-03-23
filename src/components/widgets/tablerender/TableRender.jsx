@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Table, Input, Button, Form } from "antd";
-import { UPDATE_TABLE, UPDATE_SCHEMA_TABLE } from "../../../redux/constants";
+import { UPDATE_TABLE } from "../../../redux/constants";
 import "./TableRender.css";
 import * as Validations from "../../../CellValidationsFunction/index";
 import * as Popovers from "../../../utils/popovers";
@@ -15,14 +15,15 @@ const updateDynamicTable = (
   tableData,
   updateSchema,
   elements,
-  insertRow,
   setSchemaTable
 ) => {
   if (!tableData.getColumns) return;
-  const idOfImportTable = tableData?.getColumns?.id;
-  console.log({ tableData });
-  const dataIndexOfImportTable = tableData?.getColumns?.dataIndex;
   if (elements.elementsEfficent.size === 0) return;
+
+  const idOfImportTable = tableData?.getColumns?.id;
+  const dataIndexOfImportTable = tableData?.getColumns?.dataIndex;
+  const newSchemaObject = [...TablesSchemas[tableData.nameTable].schema];
+
   const values = [
     ...getValuesOfAColumn(
       {
@@ -32,7 +33,7 @@ const updateDynamicTable = (
       elements
     )
   ];
-  const newSchemaObject = [...TablesSchemas[tableData.nameTable].schema];
+
   values.forEach((value) => {
     let stringifyValue = JSON.stringify(value).slice(1);
     stringifyValue = stringifyValue.slice(0, -1);
@@ -49,10 +50,9 @@ const updateDynamicTable = (
   });
   const newTable = JSON.parse(JSON.stringify(tableData));
   newTable.schema = [...newSchemaObject];
-  console.log({ tableData });
-  if (JSON.stringify(tableData.schema) != JSON.stringify(newTable.schema)) {
+
+  if (JSON.stringify(tableData.schema) !== JSON.stringify(newTable.schema)) {
     const payload = { id: tableData.id, tableData: newTable };
-    console.log("idk");
     setSchemaTable(newTable.schema);
     updateSchema(payload);
   }
@@ -158,7 +158,7 @@ const EditableCell = ({
           paddingRight: "24",
           backgroundColor:
             defaultValuesRow !== undefined &&
-            children[1] != defaultValuesRow[dataIndex]
+            children[1] !== defaultValuesRow[dataIndex]
               ? "gold"
               : "white"
         }}
@@ -194,6 +194,7 @@ function TableRender({ id, name }) {
   const updateSchema = (payload) => {
     dispatch({ type: UPDATE_TABLE, payload: payload });
   };
+
   const [numRows, setNumRows] = useState(tableData.data.length);
   const [validationsOfTable, setValidationsOfTable] = useState({});
   const [popoversObject, setPopoversObject] = useState({});
@@ -224,6 +225,7 @@ function TableRender({ id, name }) {
       payload: { id: id, tableData: newData }
     });
   };
+
   const insertRow = (row, defaultRow = null) => {
     const newData = Object.assign(tableData);
     newData.data.push(row);
@@ -233,7 +235,7 @@ function TableRender({ id, name }) {
       payload: { id: id, tableData: newData }
     });
   };
-  console.log(schemaTable);
+
   useEffect(() => {
     footersFunction(tableData, Footers, setFooters);
     updateDynamicTable(
@@ -250,6 +252,7 @@ function TableRender({ id, name }) {
     popovers(tableData, setPopoversObject);
     setSchemaTable(tableData.schema);
   }, [tableData]);
+
   //SAVE MODIFICATIONS ON CELL
   const handleSave = (row) => {
     updateRow(row);

@@ -5,12 +5,12 @@ export const openErrorNotification = (errorMessage) => {
     description:
       "The saving stop due to errors from tables in current page" +
       errorMessage,
-    duration: 0,
+    duration: 0
   });
 };
 export const openSuccessNotification = () => {
-  notification["success"](  {
+  notification["success"]({
     message: "Saved",
-    description: "The current tab was saved",
+    description: "The current tab was saved"
   });
 };

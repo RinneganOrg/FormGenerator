@@ -6,7 +6,7 @@ export const popoverCounties = (props) => {
   //be sure that for each cell just one popover will be render
 
   if (props.column === "surface") {
-    return `Nu va bucurati ca aveti pamant mult (${props.value}), ca va fi a Rusiei`;
+    return `Nu va bucurati ca aveti pamant mult de (${props.value}), ca va fi a Rusiei`;
   }
   return null;
 };

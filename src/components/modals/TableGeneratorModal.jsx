@@ -2,13 +2,12 @@ import React from "react";
 import { Modal, Button } from "antd";
 import { TableOutlined } from "@ant-design/icons";
 import { tables } from "../../data/index";
-
-import "../../styles/tablegenerator.css";
+//CMS Functionalities
 function TableGeneratorModal({
   modalTableGenerator,
   setModalTableGenerator,
   pageName,
-  tabName,
+  tabName
 }) {
   const handleOk = (table) => {
     //To DO

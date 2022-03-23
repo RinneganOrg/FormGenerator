@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 import { DiffOutlined } from "@ant-design/icons";
 import { Input } from "antd";
 
@@ -10,7 +10,7 @@ function PageGeneratorModal({
   modalPageGenerator,
   setModalPageGenerator,
   country,
-  addNewPage,
+  addNewPage
 }) {
   const [pageName, setPageName] = useState("Untitled");
   const history = useHistory();
@@ -18,7 +18,7 @@ function PageGeneratorModal({
   const handleOk = () => {
     const payload = {
       country: country,
-      newPage: { pageName: pageName, tabs: [] },
+      newPage: { pageName: pageName, tabs: [] }
     };
     addNewPage(payload);
     history.push(`/${country}/${pageName}`);
@@ -48,7 +48,7 @@ function PageGeneratorModal({
 }
 function mapDispatchToProps(dispatch) {
   return {
-    addNewPage: (payload) => dispatch({ type: ADD_NEW_PAGE, payload: payload }),
+    addNewPage: (payload) => dispatch({ type: ADD_NEW_PAGE, payload: payload })
   };
 }
 

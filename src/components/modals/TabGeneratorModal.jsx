@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal } from "antd";
 import { DiffOutlined } from "@ant-design/icons";
 import { Input } from "antd";
-
 import { useHistory } from "react-router-dom";
+//CMS Functionalities
 function TabGeneratorModal({
   modalTabGenerator,
   setModalTabGenerator,
-  pageName,
+  pageName
 }) {
   const [tabName, setTabName] = useState("Untitled");
   const history = useHistory();

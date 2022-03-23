@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Layout } from "antd";
 import { PageHeader } from "antd";
@@ -8,6 +8,7 @@ import { siteSchema } from "../../schemas";
 import { useHistory } from "react-router-dom";
 import "./pagestart.css";
 const { Header, Content } = Layout;
+
 function PageStart({ setSelectedCountry, setCountryCode }) {
   const history = useHistory();
 
@@ -15,12 +16,15 @@ function PageStart({ setSelectedCountry, setCountryCode }) {
     const firstPage = siteSchema[country][0].pageName;
     history.push(`/${country}/${firstPage}`);
   };
+
   return (
     <div>
       <Header className="site-layout-background" style={{ padding: 0 }}>
         <PageHeader title={"Countries"} />
       </Header>
-
+      {
+        //A vrut doar inline, in css file nu merge
+      }
       <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
         <div
           className="site-layout-background"
@@ -30,7 +34,7 @@ function PageStart({ setSelectedCountry, setCountryCode }) {
             style={{
               display: "inline-block",
               alignItems: "center",
-              justifyContent: "center",
+              justifyContent: "center"
             }}
           >
             <ul className="list-country">
@@ -54,7 +58,7 @@ function PageStart({ setSelectedCountry, setCountryCode }) {
                           width: "180px",
                           height: "100px",
 
-                          border: "1px solid #efefef",
+                          border: "1px solid #efefef"
                         }}
                       />
                       <h3>{country.countryName}</h3>

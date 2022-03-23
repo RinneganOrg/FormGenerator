@@ -5,6 +5,10 @@ import { Input } from "antd";
 import { connect } from "react-redux";
 
 import { useHistory } from "react-router-dom";
+
+{
+  //CMS FUNCTIONALITIES
+}
 function TabGeneratorModal({
   modalTabGenerator,
   setModalTabGenerator,
@@ -12,7 +16,6 @@ function TabGeneratorModal({
   siteSchema
 }) {
   const [tabName, setTabName] = useState("Untitled");
-  const history = useHistory();
 
   const handleOk = (table) => {
     let foundIndex = siteSchema.findIndex((x) => x.pageName === pageName);
@@ -43,14 +46,5 @@ function TabGeneratorModal({
     </Modal>
   );
 }
-function mapStateToProps(state) {
-  return {
-    siteSchema: state
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return {
-    addNewTab: (payload) => dispatch({ type: ADD_NEW_TAB, payload: payload })
-  };
-}
-export default connect(mapStateToProps, mapDispatchToProps)(TabGeneratorModal);
+
+export default TabGeneratorModal;

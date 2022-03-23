@@ -8,7 +8,7 @@ import TableGeneratorModal from "../modals/TableGeneratorModal";
 import FormGeneratorModal from "../modals/FormGeneratorModal";
 import FieldGenerator from "../FieldGenerator";
 import Navbar from "../pagesnavigation/Navbar";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 import { countries } from "../../data/countries";
 import { Validations } from "../Validation";
 import {
@@ -22,10 +22,10 @@ function PageRender({
   setModalTableGenerator,
   setSelectedCountry,
   setCountryCode,
-  siteSchema,
   addNewElement
 }) {
   let { country, pageName } = useParams();
+  const siteSchema = useSelector((state) => state);
   const countrySchema = siteSchema[country];
 
   const [tabName, setTabName] = useState("");
@@ -142,10 +142,5 @@ function PageRender({
     </div>
   );
 }
-function mapStateToProps(state) {
-  return {
-    siteSchema: state
-  };
-}
 
-export default connect(mapStateToProps, null)(PageRender);
+export default PageRender;
